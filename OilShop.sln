@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31605.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OilShop", "OilShop\OilShop.csproj", "{F088DFF2-C5A4-4054-98F2-5B3A8616C2FE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F088DFF2-C5A4-4054-98F2-5B3A8616C2FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F088DFF2-C5A4-4054-98F2-5B3A8616C2FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F088DFF2-C5A4-4054-98F2-5B3A8616C2FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F088DFF2-C5A4-4054-98F2-5B3A8616C2FE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F4C72ACE-2071-47B9-8C25-43C1C407E743}
+	EndGlobalSection
+EndGlobal
