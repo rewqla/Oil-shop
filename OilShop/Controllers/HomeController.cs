@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OilShop.Models;
+using OilShop.Repo.Implement;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,14 +13,16 @@ namespace OilShop.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IOilRepo _oilRepo;
+        public HomeController(ILogger<HomeController> logger, IOilRepo oilRepo)
         {
             _logger = logger;
+            _oilRepo = oilRepo;
         }
 
         public IActionResult Index()
         {
+            ViewBag.Oils = _oilRepo.GetAll();
             return View();
         }
 
