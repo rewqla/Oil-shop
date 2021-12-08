@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -7,8 +8,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OilShop.Entities;
+using OilShop.Mappers;
 using OilShop.Repo.Implement;
 using OilShop.Repo.Interfaces;
+using OilShop.Services.Implements;
+using OilShop.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,9 +34,20 @@ namespace OilShop
         {
             services.AddControllersWithViews();
 
+            //Mappper
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new Automapper());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            //Connection to database
             services.AddDbContext<ApplicationDbContext>(options =>
                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
+            //Identity
             services.AddIdentity<DbUser, DbRole>(options =>
             {
                 options.Stores.MaxLengthForKeys = 128;
@@ -44,8 +59,10 @@ namespace OilShop
             }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
             services.AddMvc();
-
+            //Reposetories
             services.AddTransient<IOilRepo, OilRepo>();
+            //Services
+            services.AddScoped<IOilService, OilService>();
 
             services.AddDistributedMemoryCache();
             services.AddSession();

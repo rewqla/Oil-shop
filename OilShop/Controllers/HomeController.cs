@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OilShop.Models;
+using OilShop.Models.Oil;
 using OilShop.Repo.Implement;
+using OilShop.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,17 +15,75 @@ namespace OilShop.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IOilRepo _oilRepo;
-        public HomeController(ILogger<HomeController> logger, IOilRepo oilRepo)
+        private readonly IOilService _oilService;
+        public HomeController(ILogger<HomeController> logger, IOilService oilService)
         {
             _logger = logger;
-            _oilRepo = oilRepo;
+            _oilService = oilService;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
-            ViewBag.Oils = _oilRepo.GetAll();
+            ViewBag.Oils = _oilService.GetAll();
+            ViewBag.Oil = _oilService.GetById(1);
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(ReplaceOilViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                _oilService.Create(model);
+                return Redirect("/");
+            }
+            else
+            {
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Delete(long Id)
+        {
+            _oilService.Delete(Id);
+            return Redirect("/");
+        }
+
+
+        [HttpGet]
+        public IActionResult Update(long Id)
+        {
+            var model = _oilService.GetByIdFull(Id);
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Update(ReplaceOilViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                _oilService.Update(model);
+                return Redirect("/");
+            }
+            else
+            {
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Details(long Id)
+        {
+            var model = _oilService.GetByIdFull(Id);
+            return View(model);
         }
 
         public IActionResult Privacy()

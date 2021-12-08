@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace OilShop.Repo.Implement
 {
-    public interface IOilRepo: IGenericRepository<Oil>
+    public interface IOilRepo : IGenericRepository<Oil>
     {
     }
 }

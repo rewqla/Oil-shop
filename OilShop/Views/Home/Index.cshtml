@@ -7,6 +7,15 @@
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     @foreach (var item in ViewBag.Oils)
     {
-        <h1 class="display-4">@item.Name</h1>
+        <div class=" container">
+            <a href="/Home/details/@item.Id"><h1 class="display-4">@item.Name</h1></a>
+            <a class="btn-primary btn" href="/Home/Update/@item.Id">Update</a>
+            <form asp-action="delete">
+                <input hidden id="Id" name="Id" value="@item.Id"/>
+                <button class="btn-primary btn" type="submit">Delete</button>
+            </form>
+        </div>
     }
+    <a class="btn-primary btn" href="/Home/Create">Add</a>
+
 </div>
