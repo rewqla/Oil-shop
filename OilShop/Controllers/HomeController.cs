@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OilShop.Helpers;
 using OilShop.Models;
 using OilShop.Models.Oil;
 using OilShop.Repo.Implement;
@@ -26,7 +28,6 @@ namespace OilShop.Controllers
         public IActionResult Index()
         {
             ViewBag.Oils = _oilService.GetAll();
-            ViewBag.Oil = _oilService.GetById(1);
             return View();
         }
 
@@ -44,10 +45,7 @@ namespace OilShop.Controllers
                 _oilService.Create(model);
                 return Redirect("/");
             }
-            else
-            {
-                return View(model);
-            }
+            return View(model);
         }
 
         [HttpPost]
@@ -73,10 +71,7 @@ namespace OilShop.Controllers
                 _oilService.Update(model);
                 return Redirect("/");
             }
-            else
-            {
-                return View(model);
-            }
+            return View(model);
         }
 
         [HttpGet]

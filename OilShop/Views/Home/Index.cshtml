@@ -1,11 +1,12 @@
-﻿@{
+﻿@model OilShop.Models.Oil.OilViewModel;
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome @User.Identity.IsAuthenticated</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    @foreach (var item in ViewBag.Oils)
+    @*@foreach (var item in ViewBag.Oils)
     {
         <div class=" container">
             <a href="/home/details/@item.Id"><h1 class="display-4">@item.Name</h1></a>
@@ -15,7 +16,28 @@
                 <button class="btn-primary btn" type="submit">Delete</button>
             </form>
         </div>
-    }
+    }*@
+    <div class="row d-flex justify-content-around p-3">
+        @foreach (var p in ViewBag.Oils)
+        {
+        <div class="card mb-3" style="width: 20rem;">
+            <a href="/home/details/@p.Id">
+                <img class="card-img-top" src="@p.Image" alt="@p.Name card">
+            </a>
+            <div class="card-body">
+                <a href="/home/details/@p.Id">
+                    <h4 class="card-title text-dark">@p.Name @p.Capacity</h4>
+                </a>
+            </div>
+            <a class="btn-primary btn" href="/Home/Update/@p.Id">Update</a>
+            <form asp-action="delete">
+                <input hidden id="Id" name="Id" value="@p.Id" />
+                <button class="btn-primary btn" type="submit">Delete</button>
+            </form>
+        </div>
+        }
+    </div>
+
     <a class="btn-primary btn" href="/home/create">Add</a>
     <a class="btn-primary btn" href="/account/login">Login</a>
     <a class="btn-primary btn" href="/account/register">Register</a>

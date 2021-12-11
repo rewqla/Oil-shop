@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 using OilShop.Entities;
+using OilShop.Helpers;
 using OilShop.Models.Oil;
 using OilShop.Repo.Implement;
 using OilShop.Services.Interfaces;
@@ -14,14 +16,20 @@ namespace OilShop.Services.Implements
     {
         private readonly IOilRepo _oilRepo;
         private readonly IMapper _mapper;
-        public OilService(IOilRepo oilRepo, IMapper mapper)
+        private readonly IWebHostEnvironment _env;
+
+        public OilService(IOilRepo oilRepo, IMapper mapper, IWebHostEnvironment env)
         {
             _oilRepo = oilRepo;
             _mapper = mapper;
+            _env = env;
         }
 
         public void Create(ReplaceOilViewModel model)
         {
+            string base64 = model.Image;
+            model.Image = base64.urlCreator(_env, "");
+
             _oilRepo.Add(_mapper.Map<Oil>(model));
         }
 
@@ -34,6 +42,10 @@ namespace OilShop.Services.Implements
         public OilViewModel GetById(long Id)
         {
             var model = _oilRepo.GetAll().FirstOrDefault(x => x.Id == Id);
+            if (!model.Image.Contains("https"))
+            {
+                model.Image = "/" + model.Image;
+            }
             return _mapper.Map<OilViewModel>(model);
         }
 
@@ -45,12 +57,18 @@ namespace OilShop.Services.Implements
 
         public void Update(ReplaceOilViewModel model)
         {
+            string base64 = model.Image;
+            model.Image = base64.urlCreator(_env, "");
             _oilRepo.Update(_mapper.Map<Oil>(model));
         }
 
         public ReplaceOilViewModel GetByIdFull(long Id)
         {
             var model = _oilRepo.GetAll().FirstOrDefault(x => x.Id == Id);
+            if (!model.Image.Contains("https"))
+            {
+                model.Image = "/" + model.Image;
+            }
             return _mapper.Map<ReplaceOilViewModel>(model);
         }
     }
