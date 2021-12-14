@@ -6,8 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Validators\" />
-    <Folder Include="wwwroot\css\" />
-    <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
   <ItemGroup>

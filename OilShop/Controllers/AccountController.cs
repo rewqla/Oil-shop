@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OilShop.Entities;
-using OilShop.Models.User;
+using OilShop.Models.Account;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +25,15 @@ namespace OilShop.Controllers
 
 
         [HttpGet]
-        public IActionResult Login()
+        public async Task<IActionResult> Login()
         {
-            return View();
+            var currentUser = await _userManager.FindByIdAsync(_userManager.GetUserId(HttpContext.User));
+            if (currentUser == null)
+            {
+                return View();
+            }
+            return Redirect("/");
+
         }
 
         [HttpPost]
@@ -51,9 +57,14 @@ namespace OilShop.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
-            return View();
+            var currentUser = await _userManager.FindByIdAsync(_userManager.GetUserId(HttpContext.User));
+            if (currentUser == null)
+            {
+                return View();
+            }
+            return Redirect("/");
         }
 
         [HttpPost]
@@ -75,6 +86,36 @@ namespace OilShop.Controllers
                 return StatusCode(500);
             }
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Profile()
+        {
+            var currentUser = await _userManager.FindByIdAsync(_userManager.GetUserId(HttpContext.User));
+            if (currentUser != null)
+            {
+                var user = _mapper.Map<ProfileViewModel>(currentUser);
+
+                return View(user);
+            }
+            else
+            {
+                return RedirectToAction("login", "account");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Profile(ProfileViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(_userManager.GetUserId(HttpContext.User));
+            user = _mapper.Map(model,user);
+
+            IdentityResult result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return Redirect("/account/profile");
+            }
+            return StatusCode(500);
         }
 
         [HttpPost]
