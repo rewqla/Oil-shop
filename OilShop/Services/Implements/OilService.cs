@@ -42,7 +42,7 @@ namespace OilShop.Services.Implements
         public OilViewModel GetById(long Id)
         {
             var model = _oilRepo.GetAll().FirstOrDefault(x => x.Id == Id);
-            if (!model.Image.Contains("https"))
+            if (!model.Image.Contains("https") && !model.Image.Contains("/Uploads"))
             {
                 model.Image = "/" + model.Image;
             }
@@ -65,11 +65,42 @@ namespace OilShop.Services.Implements
         public ReplaceOilViewModel GetByIdFull(long Id)
         {
             var model = _oilRepo.GetAll().FirstOrDefault(x => x.Id == Id);
-            if (!model.Image.Contains("https"))
+            if (!model.Image.Contains("https") && !model.Image.Contains("/Uploads"))
             {
                 model.Image = "/" + model.Image;
             }
             return _mapper.Map<ReplaceOilViewModel>(model);
+        }
+
+        public OilViewModelList GetOils(int page, string SearchData)
+        {
+            OilViewModelList model = new OilViewModelList();
+            int pageSize = 1;
+            var query = _oilRepo.GetAll();
+
+            if (!String.IsNullOrEmpty(SearchData))
+            {
+                SearchData = SearchData.ToLower();
+                query = query.Where(x => x.Name.ToLower().Contains(SearchData) || x.Type.ToLower().Contains(SearchData)
+                || x.Capacity.ToLower().Contains(SearchData)).ToList();
+            }
+
+            int pageN = page - 1;
+
+            model.List = _mapper.Map<List<OilViewModel>>(query.OrderBy(x => x.Name).Skip(pageN * pageSize).Take(pageSize).ToList());
+            foreach (var item in model.List)
+            {
+                if (!item.Image.Contains("https") && !item.Image.Contains("/Uploads"))
+                {
+                    item.Image = "/" + item.Image;
+                }
+            }
+
+            int allCount = query.Count();
+            model.Page = page;
+            model.MaxPage = (int)Math.Ceiling((double)allCount / pageSize);
+
+            return model;
         }
     }
 }

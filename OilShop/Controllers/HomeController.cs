@@ -25,10 +25,12 @@ namespace OilShop.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(string SearchData = "", int Page = 1)
         {
-            ViewBag.Oils = _oilService.GetAll();
-            return View();
+            var model = _oilService.GetOils(Page, SearchData);
+            if (!String.IsNullOrEmpty(SearchData))
+                ViewBag.SearchData = SearchData;
+            return View(model);
         }
 
         [HttpGet]

@@ -10,6 +10,7 @@ namespace OilShop.Services.Interfaces
     {
         OilViewModel GetById(long Id);
         ReplaceOilViewModel GetByIdFull(long Id);
+        OilViewModelList GetOils(int page, string SearchData);
         List<OilViewModel> GetAll();
         void Delete(long Id);
         void Create(ReplaceOilViewModel model);

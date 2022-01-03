@@ -1,4 +1,4 @@
-﻿@model OilShop.Models.Oil.OilViewModel;
+﻿@model OilShop.Models.Oil.OilViewModelList;
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -6,37 +6,64 @@
 <div class="text-center">
     <h1 class="display-4">Welcome @User.Identity.IsAuthenticated</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    @*@foreach (var item in ViewBag.Oils)
+
+
+    @if (Model.List.Count() == 0)
     {
-        <div class=" container">
-            <a href="/home/details/@item.Id"><h1 class="display-4">@item.Name</h1></a>
-            <a class="btn-primary btn" href="/Home/Update/@item.Id">Update</a>
-            <form asp-action="delete">
-                <input hidden id="Id" name="Id" value="@item.Id" />
-                <button class="btn-primary btn" type="submit">Delete</button>
-            </form>
+        <div class="flex-column text-center" style="margin-top:100px;margin-bottom:100px">
+            <img style="width:100%;max-width:700px" alt="nothing was found" src="~/img/ufo.jpg" />
+            <h4 class="col p-2 mt-5">На жаль, ми нічого не знайшли </h4>
         </div>
-    }*@
-    <div class="row d-flex justify-content-around p-3">
-        @foreach (var p in ViewBag.Oils)
+    }
+
+    else
+    {
+
+        <div class="row d-flex justify-content-around p-3">
+            @foreach (var p in Model.List)
+            {
+                <div class="card mb-3" style="width: 20rem;">
+                    <a href="/home/details/@p.Id">
+                        <img class="card-img-top" src="@p.Image" alt="@p.Name card">
+                    </a>
+                    <div class="card-body">
+                        <a href="/home/details/@p.Id">
+                            <h4 class="card-title text-dark">@p.Name @p.Capacity</h4>
+                        </a>
+                    </div>
+                    <a class="btn-primary btn" href="/Home/Update/@p.Id">Update</a>
+                    <form asp-action="delete">
+                        <input hidden id="Id" name="Id" value="@p.Id" />
+                        <button class="btn-primary btn" type="submit">Delete</button>
+                    </form>
+                </div>
+            }
+        </div>
+
+        @if (Model.MaxPage != 1)
         {
-        <div class="card mb-3" style="width: 20rem;">
-            <a href="/home/details/@p.Id">
-                <img class="card-img-top" src="@p.Image" alt="@p.Name card">
-            </a>
-            <div class="card-body">
-                <a href="/home/details/@p.Id">
-                    <h4 class="card-title text-dark">@p.Name @p.Capacity</h4>
-                </a>
-            </div>
-            <a class="btn-primary btn" href="/Home/Update/@p.Id">Update</a>
-            <form asp-action="delete">
-                <input hidden id="Id" name="Id" value="@p.Id" />
-                <button class="btn-primary btn" type="submit">Delete</button>
-            </form>
-        </div>
+            var SearchData = ViewBag.SearchData;
+            <nav class="">
+                <ul class="pagination justify-content-center">
+                    @{int Page = Model.Page; }
+                    <li class="page-item @(Page == 1 ? "disabled" : "")">
+                        <a class="page-link" asp-action="index" asp-controller="home" asp-route-SearchData="@ViewBag.SearchData"
+                           asp-route-Page="@(Page - 1)" tabindex="-1">Попередня</a>
+                    </li>
+                    @for (int i = 1; i < Model.MaxPage + 1; i++)
+                    {
+                        <li class="page-item @(Page == i ? "active" : "" )">
+                            <a class="page-link" asp-action="index" asp-controller="home" asp-route-SearchData="@ViewBag.SearchData"
+                               asp-route-Page="@i">@i <span class="sr-only">(current)</span></a>
+                        </li>
+                    }
+                    <li class="page-item @(Page == Model.MaxPage ? "disabled" : "")">
+                        <a class="page-link" asp-action="index" asp-controller="home" asp-route-SearchData="@ViewBag.SearchData" asp-route-Page="@(Page + 1)">Наступна</a>
+                    </li>
+                </ul>
+            </nav>
         }
-    </div>
+    }
 
     <a class="btn-primary btn" href="/home/create">Add</a>
     <a class="btn-primary btn" href="/account/login">Login</a>

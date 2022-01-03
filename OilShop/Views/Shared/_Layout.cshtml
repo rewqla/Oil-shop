@@ -29,6 +29,16 @@
                             <a class="nav-link text-dark" asp-controller="Account" asp-action="Profile">Profile</a>
                         </li>
                     </ul>
+                    <form class="navbar-form navbar-right" method="get" asp-action="index" asp-controller="home" asp-route-Page="1">
+                        <div class="input-group">
+                            <input type="text" name="SearchData" class="form-control" style="min-width:250px" placeholder="Пошук">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-default clcwb">
+                                    <img src="~/img/search.svg" alt="search" class="usImg" />
+                                </button>
+                            </span>
+                        </div>
+                    </form>
                 </div>
             </div>
         </nav>
@@ -46,7 +56,6 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
